@@ -1,4 +1,4 @@
-﻿##本单元目标
+﻿﻿##本单元目标
 	一、为什么要学习数据库
 	二、数据库的相关概念      
 		DBMS、DB、SQL
@@ -72,14 +72,14 @@
 	方式二：通过windows自带的客户端
 	登录：
 	mysql 【-h主机名 -P端口号 】-u用户名 -p密码
-
+	
 	退出：
 	exit或ctrl+C
 
 
-	
-	
-	
+​	
+​	
+​	
 ###MySQL的常见命令 
 
 	1.查看当前所有的数据库
@@ -92,7 +92,7 @@
 	show tables from 库名;
 	5.创建表
 	create table 表名(
-
+	
 		列名 列类型,
 		列名 列类型，
 		。。。
@@ -147,7 +147,7 @@
 		字段名 字段类型,	
 		字段名 字段类型
 	); 创建表
-
+	
 	desc 表名; 查看指定表的结构
 	select * from 表名;显示表中的所有数据
 
@@ -184,16 +184,78 @@
 	示例：salary>10000 && salary<20000
 	
 	逻辑运算符：
-
+	
 		and（&&）:两个条件如果同时成立，结果为true，否则为false
 		or(||)：两个条件只要有一个成立，结果为true，否则为false
 		not(!)：如果条件成立，则not后为false，否则为true
-
+	
 	三、模糊查询
-	示例：last_name like 'a%'
+	示例：last_name like '%a%'
+	-----------------------------------------------------------
+		 between and 
+		 /*
+		 	使用between and 可以提高语句的简洁度
+		 	包含临界值
+		 	两个临界值不能颠倒(不会报错)
+		 */
+		 	SELECT
+		 		*
+	        FROM
+	        	employees
+	        WHERE
+	        	employee_id BETWEEN 100 AND 120;
+	 ----------------------------------------------------------
+	 	in
+	 	/*
+	 		含义：判断某字段的值是否属于in列表中的某一项
+	 		使用in提高语句简洁度
+	 		in列表的值类型必须统一或兼容
+	 		不支持下划线、百分号(只在like里支持)
+	 	*/
+	 	#案例：查询员工的公众编号是 IT_PROG、AD_VP、AD_PRES中的一个员工名和工种编号
+	 	SELECT
+	 		last_name,
+	 		job_id
+	 	FROM
+	 		employees
+	 	WHERE
+	 		job_id IN ('IT_PROT','AD_VP','AD_PRES');
+	 -----------------------------------------------------------
+	 	is null
+	 #案例：查询没有奖金的员工名和奖金率
+	 SELECT
+	 	last_name,
+	 	commission_pct
+	 FROM
+	 	employees
+	 WHERE
+	 	commission_pct IS NULL;   //IS NOT NULL 判断有奖金
+	 	-------------------------------------------------------
+	 #安全等于 <=>
+	 	/*
+	 		IS NULL: 仅仅可以判断NULL值
+	 		<=>	   : 既可以判断NULL值，又可以判断普通的数值，可读性较低
+	 	*/
+	 #案例：查询没有奖金的员工名和奖金率
+	 SELECT
+	 	last_name,
+	 	commission_pct
+	 FROM
+	 	employees
+	 WHERE
+	 	commission_pct <=> NULL; 
+	 #案例：查询工资为12000的员工信息
+	 SELECT
+	 	last_name,
+	 	commission_pct
+	 FROM
+	 	employees
+	 WHERE
+	 	commission_pct <=> 12000; 
 
 ###进阶3：排序查询	
 	
+
 	语法：
 	select
 		要查询的东西
@@ -204,7 +266,7 @@
 	
 	order by 排序的字段|表达式|函数|别名 【asc|desc】
 
-	
+
 ###进阶4：常见函数
 	一、单行函数
 	1、字符函数
@@ -221,6 +283,7 @@
 		instr返回子串第一次出现的索引
 		length 获取字节个数
 		
+
 	2、数学函数
 		round 四舍五入
 		rand 随机数
@@ -246,7 +309,7 @@
 		user当前连接用户
 
 
-	
+​	
 
 
 二、分组函数
@@ -292,7 +355,7 @@
 
 	笛卡尔乘积：如果连接条件省略或无效则会出现
 	解决办法：添加上连接条件
-	
+
 一、传统模式下的连接 ：等值连接——非等值连接
 
 
@@ -300,7 +363,7 @@
 	2.n表连接，至少需要n-1个连接条件
 	3.多个表不分主次，没有顺序要求
 	4.一般为表起别名，提高阅读性和性能
-	
+
 二、sql99语法：通过join关键字实现连接
 
 	含义：1999年推出的sql语法
@@ -322,7 +385,8 @@
 	
 	好处：语句上，连接条件和筛选条件实现了分离，简洁明了！
 
-	
+
+​	
 三、自连接
 
 案例：查询员工名和直接上级的名称
@@ -335,7 +399,7 @@ sql99
 
 sql92
 
-	
+
 	SELECT e.last_name,m.last_name
 	FROM employees e,employees m 
 	WHERE e.`manager_id`=m.`employee_id`;
@@ -366,7 +430,7 @@ sql92
 		一般搭配多行操作符使用：any、all、in、not in
 		in： 属于子查询结果中的任意一个就行
 		any和all往往可以用其他查询代替
-	
+
 ##进阶8：分页查询
 
 应用场景：
@@ -491,10 +555,11 @@ sql92
 		stuName VARCHAR(20),
 		gender CHAR,
 		bornDate DATETIME
-		
-	
-	);
 
+
+​	
+	);
+	
 	DESC studentinfo;
 	#2.修改表 alter
 	语法：ALTER TABLE 表名 ADD|MODIFY|DROP|CHANGE COLUMN 字段名 【字段类型】;
@@ -512,13 +577,15 @@ sql92
 	ALTER TABLE studentinfo ADD COLUMN email VARCHAR(20) first;
 	#⑤删除字段
 	ALTER TABLE studentinfo DROP COLUMN email;
-	
-	
+
+
+​	
 	#3.删除表
 	
 	DROP TABLE [IF EXISTS] studentinfo;
 
-	
+
+​	
 
 
 ###常见类型
@@ -601,7 +668,7 @@ sql92
 	脏读：一个事务读取到了另外一个事务未提交的数据
 	不可重复读：同一个事务中，多次读取到的数据不一致
 	幻读：一个事务读取数据时，另外一个事务进行更新，导致第一个事务读取到了没有更新的数据
-	
+
 如何避免事务的并发问题？
 
 	通过设置事务的隔离级别
@@ -609,14 +676,14 @@ sql92
 	2、READ COMMITTED 可以避免脏读
 	3、REPEATABLE READ 可以避免脏读、不可重复读和一部分幻读
 	4、SERIALIZABLE可以避免脏读、不可重复读和幻读
-	
+
 设置隔离级别：
 
 	set session|global  transaction isolation level 隔离级别名;
 查看隔离级别：
 
 	select @@tx_isolation;
-	
+
 
 
 ##视图
@@ -653,8 +720,9 @@ sql92
 	3、修改视图的数据
 	
 	UPDATE my_v4 SET last_name ='梦姑' WHERE last_name='虚竹';
-	
-	
+
+
+​	
 	4、删除视图的数据
 	DELETE FROM my_v4;
 ###某些视图不能更新
@@ -706,13 +774,13 @@ sql92
 	create procedure 存储过程名(in|out|inout 参数名  参数类型,...)
 	begin
 		存储过程体
-
+	
 	end
 
 类似于方法：
 
 	修饰符 返回类型 方法名(参数类型 参数名,...){
-
+	
 		方法体;
 	}
 
@@ -722,16 +790,16 @@ sql92
 	delimiter 新的结束标记
 	示例：
 	delimiter $
-
+	
 	CREATE PROCEDURE 存储过程名(IN|OUT|INOUT 参数名  参数类型,...)
 	BEGIN
 		sql语句1;
 		sql语句2;
-
+	
 	END $
-
+	
 	2、存储过程体中可以有多条sql语句，如果仅仅一条sql语句，则可以省略begin end
-
+	
 	3、参数前面的符号的意思
 	in:该参数只能作为输入 （该参数不能做返回值）
 	out：该参数只能作为输出（该参数只能做返回值）
@@ -869,7 +937,7 @@ sql92
 	...
 	else 结果n或语句n(如果是语句，需要加分号)
 	end 【case】（如果是放在begin end中需要加上case，如果放在select后面不需要）
-
+	
 	情况二：类似于多重if
 	case 
 	when 条件1 then 结果1或语句1(如果是语句，需要加分号) 
@@ -911,15 +979,15 @@ sql92
 	【标签：】WHILE 循环条件  DO
 		循环体
 	END WHILE 【标签】;
-	
+
 特点：
 
 	只能放在BEGIN END里面
-
-	如果要搭配leave跳转语句，需要使用标签，否则可以不用标签
-
-	leave类似于java中的break语句，跳出所在循环！！！
 	
+	如果要搭配leave跳转语句，需要使用标签，否则可以不用标签
+	
+	leave类似于java中的break语句，跳出所在循环！！！
+
 
 
 
